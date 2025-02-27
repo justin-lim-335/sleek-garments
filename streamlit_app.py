@@ -51,7 +51,7 @@ df["Final Score"] = (
 df = df.round(3)
 
 # Display Data
-st.title("Uniform Expansion Score Dashboard")
+st.title("Sleek Garments Expansion Score Dashboard")
 st.write("Adjust the weights in the sidebar and view the updated scores below.")
 st.dataframe(df)
 
