@@ -1,76 +1,65 @@
+import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import IPython.display as display  # For displaying DataFrames in Jupyter Notebook
+import plotly.express as px
 
-# Define weights for each criterion
-weights_updated = {
-    "Market Size": 0.30,
-    "Trade Agreement Benefit": 0.15,
-    "Tariff & Shipping": 0.20,  # Subtracted from the final score
-    "Willingness to Pay": 0.20,
-    "Production Scalability": 0.10,
-    "Seasonality": 0.10,  # Only for school uniforms
-    "Sustainability & Customization": {"Medical": 0.15, "Security": 0.15, "School": 0.05}  # Varies by uniform type
+# Dataset
+countries = ["USA", "UK", "Denmark", "Netherlands", "Germany", "France", "South Africa",
+             "Botswana", "Nigeria", "Kenya", "Bahamas", "Guyana"]
+
+# Initialize default weights
+weight_defaults = {
+    "Market Size": 30,
+    "Trade Agreement Benefit": 15,
+    "Tariff & Shipping": 20,
+    "Willingness to Pay": 20,
+    "Production Scalability": 10,
+    "Seasonality": 10,
+    "Sustainability & Customization": 15
 }
 
-# Define dataset for computation
-df_expansion = pd.DataFrame({
-    "Country": ["USA", "UK", "Denmark", "Netherlands", "Germany", "France", "South Africa",
-                "Botswana", "Nigeria", "Kenya", "Bahamas", "Guyana"],
+# Sidebar sliders for weight adjustments
+st.sidebar.header("Adjust Weights (Total Must Be 100)")
+weights = {}
+total_weight = 0
 
-    # Market Size (Normalized) for each uniform type
-    "Market Size - Medical": [1.0000, 0.1000, 0.0040, 0.0428, 0.4000, 0.0933, 0.0333, 0.0007, 0.0023, 0.0127, 0.0002, 0.0004],
-    "Market Size - Security": [1.0000, 0.1778, 0.0044, 0.0356, 0.2889, 0.2033, 0.6667, 0.0033, 0.9222, 0.4444, 0.0017, 0.0033],
-    "Market Size - School": [0.3714, 0.2571, 0.0001, 0.0003, 0.0057, 0.0029, 0.2857, 0.0143, 1.0000, 0.4286, 0.0014, 0.0051],
+for key in weight_defaults:
+    weights[key] = st.sidebar.slider(key, 0, 100, weight_defaults[key])
+    total_weight += weights[key]
 
-    # Willingness to Pay (Normalized)
-    "WTP - Medical": [0.62, 1.00, 0.88, 0.79, 0.76, 0.83, 0.33, 0.43, 0.42, 0.45, 0.78, 0.45],
-    "WTP - Security": [0.80, 0.64, 0.82, 0.74, 0.72, 0.83, 0.52, 0.68, 0.33, 0.34, 1.00, 0.58],
-    "WTP - School": [0.80, 0.69, 0.78, 0.70, 0.68, 0.71, 0.42, 0.59, 0.39, 0.42, 1.00, 0.58],
+# Normalize weights to sum to 100 if they don't already
+if total_weight != 100:
+    factor = 100 / total_weight
+    weights = {key: round(value * factor) for key, value in weights.items()}
 
-    # Sustainability & Customization Index
+# Dummy Data for Expansion Scores
+data = {
+    "Country": countries,
+    "Market Size": [1.0, 0.1, 0.004, 0.0428, 0.4, 0.0933, 0.0333, 0.0007, 0.0023, 0.0127, 0.0002, 0.0004],
+    "Willingness to Pay": [0.62, 1.00, 0.88, 0.79, 0.76, 0.83, 0.33, 0.43, 0.42, 0.45, 0.78, 0.45],
     "Sustainability": [64.08, 84.92, 51.91, 49.71, 79.92, 67.09, 62.65, 38.56, 31.83, 34.03, 40.88, 39.59],
+    "Tariff & Shipping": [62.2, 66.7, 58.9, 58.9, 58.9, 61.3, 62.6, 33.3, 67.4, 72.1, 53.3, 38.5]
+}
 
-    # Tariff & Shipping Cost Index (Higher = Worse)
-    "Tariff & Shipping": [62.2, 66.7, 58.9, 58.9, 58.9, 61.3, 62.6, 33.3, 67.4, 72.1, 53.3, 38.5],
+df = pd.DataFrame(data)
 
-    # Seasonality Index (Only for school uniforms)
-    "Seasonality": [0.33, 0.62, 0.39, 0.38, 0.40, 0.38, 0.66, 0.66, 0.69, 0.64, 0.63, 0.62]
-})
+# Compute expansion score
+df["Final Score"] = (
+    weights["Market Size"] * df["Market Size"] +
+    weights["Willingness to Pay"] * df["Willingness to Pay"] +
+    weights["Sustainability & Customization"] * (df["Sustainability"] / 100) -
+    weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100)
+)
 
-# Assuming Production Scalability is the same as Market Size for now
-df_expansion["Production Scalability"] = df_expansion["Market Size - Medical"]  # Placeholder
+df = df.round(3)
 
-# Compute final expansion scores with new weights and subtract Tariff & Shipping index
-for uniform in ["Medical", "Security", "School"]:
-    df_expansion[f"Final Expansion Score - {uniform}"] = (
-        (weights_updated["Market Size"] * df_expansion[f"Market Size - {uniform}"]) +
-        (weights_updated["Willingness to Pay"] * df_expansion[f"WTP - {uniform}"]) +
-        (weights_updated["Trade Agreement Benefit"] * (1 - df_expansion["Tariff & Shipping"] / 100)) -  # Benefit: lower is better
-        (weights_updated["Tariff & Shipping"] * (df_expansion["Tariff & Shipping"] / 100)) +  # Subtract higher costs
-        (weights_updated["Production Scalability"] * df_expansion["Production Scalability"]) +
-        (weights_updated["Sustainability & Customization"][uniform] * df_expansion["Sustainability"] / 100) +  # Normalize to 0-1
-        (weights_updated["Seasonality"] * df_expansion["Seasonality"] if uniform == "School" else 0)  # Only for school uniforms
-    )
+# Display Data
+st.title("Uniform Expansion Score Dashboard")
+st.write("Adjust the weights in the sidebar and view the updated scores below.")
+st.dataframe(df)
 
-# Round values for readability
-df_expansion = df_expansion.round(3)
-
-# Display the updated dataset without using ace_tools
-display.display(df_expansion)
-
-# Create visualizations for expansion scores with values on bars
-for uniform in ["Medical", "Security", "School"]:
-    plt.figure(figsize=(12, 6))
-    bars = plt.barh(df_expansion["Country"], df_expansion[f"Final Expansion Score - {uniform}"], color='royalblue')
-
-    # Add text labels for each bar
-    for bar in bars:
-        plt.text(bar.get_width() + 0.01, bar.get_y() + bar.get_height()/2,
-                 round(bar.get_width(), 2), ha='left', va='center', fontsize=10)
-
-    plt.xlabel("Final Expansion Score")
-    plt.ylabel("Country")
-    plt.title(f"Final Expansion Score for {uniform} Uniforms")
-    plt.gca().invert_yaxis()  # Invert axis for better readability
-    plt.show()
+# Plotly Visualization
+fig = px.bar(df, x="Final Score", y="Country", orientation='h', title="Final Expansion Scores",
+             text=df["Final Score"], color=df["Final Score"], color_continuous_scale="blues")
+fig.update_traces(texttemplate='%{text}', textposition='outside')
+fig.update_layout(yaxis=dict(categoryorder='total ascending'))
+st.plotly_chart(fig)
