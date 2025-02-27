@@ -9,12 +9,10 @@ countries = ["USA", "UK", "Denmark", "Netherlands", "Germany", "France", "South 
 # Initialize default weights
 weight_defaults = {
     "Market Size": 30,
-    "Trade Agreement Benefit": 15,
     "Tariff & Shipping": 20,
-    "Willingness to Pay": 20,
-    "Production Scalability": 10,
-    "Seasonality": 10,
-    "Sustainability & Customization": 15
+    "Willingness to Pay": 30,
+    "Seasonality": 0,
+    "Sustainability & Customization": 20
 }
 
 # Sidebar sliders for weight adjustments
