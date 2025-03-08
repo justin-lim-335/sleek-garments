@@ -52,34 +52,14 @@ df["Final Score"] = (
 
 df = df.round(3)
 
-# Melt DataFrame for stacked bar chart
-df_melted = df.melt(id_vars=["Country"], 
-                    value_vars=["Market Size Score", "Willingness Score", "Sustainability Score", 
-                                "Tariff Score", "Seasonality Score"],
-                    var_name="Factor", 
-                    value_name="Score")
-
 # Display Data
 st.title("Sleek Garments Expansion Score Dashboard")
 st.write("Adjust the weights in the sidebar and view the updated scores below.")
 st.dataframe(df)
 
-# Plotly Stacked Bar Chart
-fig = px.bar(df_melted, 
-             x="Score", 
-             y="Country", 
-             color="Factor", 
-             orientation='h', 
-             title="Final Expansion Scores Breakdown",
-             text_auto=True, 
-             barmode="stack",
-             color_discrete_map={
-                 "Market Size Score": "blue",
-                 "Willingness Score": "green",
-                 "Sustainability Score": "orange",
-                 "Tariff Score": "red",
-                 "Seasonality Score": "purple"
-             })
-
+# Plotly Visualization
+fig = px.bar(df, x="Final Score", y="Country", orientation='h', title="Final Expansion Scores",
+             text=df["Final Score"], color=df["Final Score"], color_continuous_scale="blues")
+fig.update_traces(texttemplate='%{text}', textposition='outside')
 fig.update_layout(yaxis=dict(categoryorder='total ascending'))
 st.plotly_chart(fig)
