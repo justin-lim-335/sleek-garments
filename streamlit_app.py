@@ -45,8 +45,6 @@ uniform_type = st.radio("Select Uniform Type:", ["Security", "Medical", "School"
 
 df = pd.DataFrame(data)
 
-print(df.head())
-
 # Dynamically set the columns based on user selection
 market_size_col = f"Market Size - {uniform_type}"
 willingness_col = f"Willingness - {uniform_type}"
