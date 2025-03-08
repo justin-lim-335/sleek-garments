@@ -57,7 +57,7 @@ df["Market Size Score"] = weights["Market Size"] * df[market_size_col]
 df["Willingness Score"] = weights["Willingness to Pay"] * df[willingness_col]
 df["Sustainability Score"] = weights["Sustainability & Customization"] * (df["Sustainability"] / 100)
 df["Tariff Score"] = weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100)
-df["Seasonality Score"] = weights["Seasonality"] * (df["Seasonality"])
+df["Seasonality Score"] = weights["Seasonality"] * df["Seasonality"]
 
 # Compute final score
 df["Final Score"] = (
