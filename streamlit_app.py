@@ -28,8 +28,6 @@ for key in weight_defaults:
 if total_weight != 100:
     factor = 100 / total_weight
     weights = {key: round(value * factor) for key, value in weights.items()}
-# Uniform type selection
-uniform_type = st.radio("Select Uniform Type:", ["Security", "Medical", "School"])
 
 # Dummy Data for Expansion Scores
 data = {
@@ -44,6 +42,9 @@ data = {
     "Tariff & Shipping": [62.2, 66.7, 58.9, 58.9, 58.9, 61.3, 62.6, 33.3, 67.4, 72.1, 53.3, 38.5], 
     "Seasonality": [0.33, 0.62, 0.39, 0.38, 0.4, 0.38, 0.66, 0.66, 0.69, 0.64, 0.63, 0.62]
 }
+
+# Uniform type selection
+uniform_type = st.radio("Select Uniform Type:", ["Security", "Medical", "School"])
 
 df = pd.DataFrame(data)
 
