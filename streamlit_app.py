@@ -41,25 +41,52 @@ data = {
 
 df = pd.DataFrame(data)
 
-# Compute expansion score
+# Compute weighted contributions
+df["Market Size Score"] = weights["Market Size"] * df["Market Size"]
+df["Willingness Score"] = weights["Willingness to Pay"] * df["Willingness to Pay"]
+df["Sustainability Score"] = weights["Sustainability & Customization"] * (df["Sustainability"] / 100)
+df["Tariff Score"] = weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100)
+df["Seasonality Score"] = weights["Seasonality"] * (df["Seasonality"] / 100)
+
+# Compute final score
 df["Final Score"] = (
-    weights["Market Size"] * df["Market Size"] +
-    weights["Willingness to Pay"] * df["Willingness to Pay"] +
-    weights["Sustainability & Customization"] * (df["Sustainability"] / 100) +
-    weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100) +
-    weights["Seasonality"] * (df["Seasonality"])
+    df["Market Size Score"] +
+    df["Willingness Score"] +
+    df["Sustainability Score"] +
+    df["Tariff Score"] +
+    df["Seasonality Score"]
 )
 
 df = df.round(3)
+
+# Melt DataFrame for stacked bar chart
+df_melted = df.melt(id_vars=["Country"], 
+                    value_vars=["Market Size Score", "Willingness Score", "Sustainability Score", 
+                                "Tariff Score", "Seasonality Score"],
+                    var_name="Factor", 
+                    value_name="Score")
 
 # Display Data
 st.title("Sleek Garments Expansion Score Dashboard")
 st.write("Adjust the weights in the sidebar and view the updated scores below.")
 st.dataframe(df)
 
-# Plotly Visualization
-fig = px.bar(df, x="Final Score", y="Country", orientation='h', title="Final Expansion Scores",
-             text=df["Final Score"], color=df["Final Score"], color_continuous_scale="blues")
-fig.update_traces(texttemplate='%{text}', textposition='outside')
+# Plotly Stacked Bar Chart
+fig = px.bar(df_melted, 
+             x="Score", 
+             y="Country", 
+             color="Factor", 
+             orientation='h', 
+             title="Final Expansion Scores Breakdown",
+             text_auto=True, 
+             barmode="stack",
+             color_discrete_map={
+                 "Market Size Score": "blue",
+                 "Willingness Score": "green",
+                 "Sustainability Score": "orange",
+                 "Tariff Score": "red",
+                 "Seasonality Score": "purple"
+             })
+
 fig.update_layout(yaxis=dict(categoryorder='total ascending'))
 st.plotly_chart(fig)
