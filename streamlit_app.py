@@ -83,7 +83,7 @@ fig = px.bar(df_melted,
              color_discrete_map={
                  "Market Size Score": "red",
                  "Willingness Score": "yellow",
-                 "Sustainability Score": "6F9CEB",
+                 "Sustainability Score": "green",
                  "Tariff Score": "blue",
                  "Seasonality Score": "purple"
              })
