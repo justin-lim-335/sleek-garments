@@ -2,10 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Dataset
-countries = ["USA", "UK", "Denmark", "Netherlands", "Germany", "France", "South Africa",
-             "Botswana", "Nigeria", "Kenya", "Bahamas", "Guyana"]
-
 # Initialize default weights
 weight_defaults = {
     "Market Size": 30,
@@ -31,7 +27,8 @@ if total_weight != 100:
 
 # Dummy Data for Expansion Scores
 data = {
-    "Country": countries,
+    "Country": ["USA", "UK", "Denmark", "Netherlands", "Germany", "France", "South Africa",
+             "Botswana", "Nigeria", "Kenya", "Bahamas", "Guyana"],
     "Market Size - Security": [1, 0.178, 0.004, 0.036, 0.289, 0.203, 0.667, 0.003, 0.922, 0.444, 0.002, 0.003],
     "Market Size - Medical": [1, 0.1, 0.004, 0.043, 0.4, 0.093, 0.033, 0.001, 0.002, 0.013, 0, 0],
     "Market Size - School": [0.371, 0.257, 0, 0, 0.006, 0.003, 0.286, 0.014, 1, 0.429, 0.001, 0.005],
