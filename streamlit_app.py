@@ -46,7 +46,7 @@ df["Market Size Score"] = weights["Market Size"] * df["Market Size"]
 df["Willingness Score"] = weights["Willingness to Pay"] * df["Willingness to Pay"]
 df["Sustainability Score"] = weights["Sustainability & Customization"] * (df["Sustainability"] / 100)
 df["Tariff Score"] = weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100)
-df["Seasonality Score"] = weights["Seasonality"] * (df["Seasonality"] / 100)
+df["Seasonality Score"] = weights["Seasonality"] * (df["Seasonality"])
 
 # Compute final score
 df["Final Score"] = (
@@ -81,10 +81,10 @@ fig = px.bar(df_melted,
              text_auto=True, 
              barmode="stack",
              color_discrete_map={
-                 "Market Size Score": "blue",
-                 "Willingness Score": "green",
-                 "Sustainability Score": "orange",
-                 "Tariff Score": "red",
+                 "Market Size Score": "red",
+                 "Willingness Score": "yellow",
+                 "Sustainability Score": "green",
+                 "Tariff Score": "blue",
                  "Seasonality Score": "purple"
              })
 
