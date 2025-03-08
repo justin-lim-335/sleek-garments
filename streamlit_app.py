@@ -16,7 +16,7 @@ weight_defaults = {
 }
 
 # Sidebar sliders for weight adjustments
-st.sidebar.header("Adjust Weights (Total Must Be 100)")
+st.sidebar.header("Adjust Weights")
 weights = {}
 total_weight = 0
 
@@ -35,7 +35,8 @@ data = {
     "Market Size": [1.0, 0.1, 0.004, 0.0428, 0.4, 0.0933, 0.0333, 0.0007, 0.0023, 0.0127, 0.0002, 0.0004],
     "Willingness to Pay": [0.62, 1.00, 0.88, 0.79, 0.76, 0.83, 0.33, 0.43, 0.42, 0.45, 0.78, 0.45],
     "Sustainability": [64.08, 84.92, 51.91, 49.71, 79.92, 67.09, 62.65, 38.56, 31.83, 34.03, 40.88, 39.59],
-    "Tariff & Shipping": [62.2, 66.7, 58.9, 58.9, 58.9, 61.3, 62.6, 33.3, 67.4, 72.1, 53.3, 38.5]
+    "Tariff & Shipping": [62.2, 66.7, 58.9, 58.9, 58.9, 61.3, 62.6, 33.3, 67.4, 72.1, 53.3, 38.5], 
+    "Seasonality": [0.33, 0.62, 0.39, 0.38, 0.4, 0.38, 0.66, 0.66, 0.69, 0.64, 0.63, 0.62]
 }
 
 df = pd.DataFrame(data)
@@ -44,8 +45,9 @@ df = pd.DataFrame(data)
 df["Final Score"] = (
     weights["Market Size"] * df["Market Size"] +
     weights["Willingness to Pay"] * df["Willingness to Pay"] +
-    weights["Sustainability & Customization"] * (df["Sustainability"] / 100) -
-    weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100)
+    weights["Sustainability & Customization"] * (df["Sustainability"] / 100) +
+    weights["Tariff & Shipping"] * (df["Tariff & Shipping"] / 100) +
+    weights["Seasonality"] * (df["Seasonality"] / 100)
 )
 
 df = df.round(3)
