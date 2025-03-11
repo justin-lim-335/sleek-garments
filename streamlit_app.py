@@ -26,6 +26,7 @@ df_provided = pd.DataFrame({
         "Tariff & Shipping": [0.62, 0.67, 0.59, 0.59, 0.59, 0.61, 0.63, 0.33, 0.67, 0.72, 0.53, 0.39], 
         "Seasonality": [0.33, 0.62, 0.39, 0.38, 0.4, 0.38, 0.66, 0.66, 0.69, 0.64, 0.63, 0.62]
     })
+df = df_provided
 
 # Create tool description
 st.sidebar.subheader("Instructions")
@@ -34,12 +35,12 @@ st.sidebar.text("Once a data source is chosen, you have the option to choose wha
 st.sidebar.text("There is also a set of sliders that contribute to the calculation of the final score. Feel free to adjust these depending on how much they are valued within the overall score and the calculated values will adjust in kind. ")
 st.sidebar.divider()
 st.sidebar.subheader("Interpreting the Score")
-st.sidebar.text("The 'expansion score' is a calculated value of all of the different performance metrics a given country performs in. Based on the selected market and assigned weights, the dashboard will display what the expansion scores look like under the specific filters and ranked ")
+st.sidebar.text("The 'expansion score' is a calculated value of all of the different metrics a given country performs in. Based on the selected market and weights assigned on the sliders, the dashboard will display what the final calculated expansion scores look like and rank the countries from highest to lowest.")
 st.sidebar.divider()
 st.sidebar.subheader("About the Tool")
 st.sidebar.text("This dashboard tool was created for the Winter 2025 MS&E 108 Senior Project Class at Stanford University by students Daniel Bishop, Manpreet Kaur, and Justin Lim for the use of Ghanian-based company, Sleek Garments.")
 st.sidebar.text("This site analyzes data/metrics about the global garments market and computes an expansion score dataset as a resource for the client, Sleek Garments, to help them determine the best countries to pursue on their goal to expand the range of their operations.")
-st.sidebar.text("The original code, instructions, and information on data sources for this tool are all located in the corresponding github repository accessible at this link")
+st.sidebar.text("The original code, instructions, and information on data sources for this tool are all located in the corresponding github repository accessible at this link (https://github.com/justin-lim-335/sleek-garments). While the dashboard is usable with provided data, anybody can source their own data and upload their own csv file to be used.")
 
 # Create tool title
 st.title("Sleek Garments Expansion Score Dashboard")
@@ -79,7 +80,8 @@ def validate_uploaded_data(df):
 
 # If the user selects to upload their own file
 uploaded_file = None
-df = df_provided
+data_source_text = "<span style='color:#6F9CEB;'>Provided Data</span>"
+caption_text = "Source: This data is from the original dataset this project was inspired by. It pulls from multiple publicly available sources, the details of which can be found in the 'About the Tool' section"
 if data_option == "Upload CSV File":
     with st.container(border=True):
         uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
@@ -91,6 +93,8 @@ if data_option == "Upload CSV File":
             if validate_uploaded_data(df_uploaded):
                 df = df_uploaded
                 st.success("Custom data loaded successfully!")
+                caption_text = "Source: Uploaded file"
+                data_source_text = f"<span style='color:#16AD43;'>{uploaded_file.name}</span>"
             else:
                 st.warning("Reverting to provided data due to invalid upload.")
 
@@ -101,13 +105,7 @@ if data_option == "Upload CSV File":
 # Display dataset in expander
 expander = st.expander("View Data")
 expander.dataframe(df)
-expander.caption("Source: Uploaded file" if uploaded_file is not None and validate_uploaded_data(uploaded_file) else "Source: This data is from the original dataset this project was inspired by. It pulls from multiple publicly available sources, the details of which can be found in the 'About the Tool' section")
-
-# Display currently used data source
-if uploaded_file is not None and validate_uploaded_data(uploaded_file):
-    data_source_text = f"<span style='color:#16AD43;'>{uploaded_file.name}</span>"
-else:
-    data_source_text = "<span style='color:#6F9CEB;'>Provided Data</span>"
+expander.caption(caption_text)
 st.markdown(f"Currently Using: {data_source_text}", unsafe_allow_html=True)
 
 # Market Type Selection
