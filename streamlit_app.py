@@ -34,7 +34,7 @@ st.sidebar.text("Once a data source is chosen, you have the option to choose wha
 st.sidebar.text("There is also a set of sliders that contribute to the calculation of the final score. Feel free to adjust these depending on how much they are valued within the overall score and the calculated values will adjust in kind. ")
 st.sidebar.divider()
 st.sidebar.subheader("Interpreting the Score")
-st.sidebar.text("The 'expansion score' is a calculated value of all of the different performance metrics a given country performs in. ")
+st.sidebar.text("The 'expansion score' is a calculated value of all of the different performance metrics a given country performs in. Based on the selected market and assigned weights, the dashboard will display what the expansion scores look like under the specific filters and ranked ")
 st.sidebar.divider()
 st.sidebar.subheader("About the Tool")
 st.sidebar.text("This dashboard tool was created for the Winter 2025 MS&E 108 Senior Project Class at Stanford University by students Daniel Bishop, Manpreet Kaur, and Justin Lim for the use of Ghanian-based company, Sleek Garments.")
@@ -104,7 +104,7 @@ expander.dataframe(df)
 expander.caption("Source: Uploaded file" if uploaded_file is not None else "Source: This data is from the original dataset this project was inspired by. It pulls from multiple publicly available sources, the details of which can be found in the 'About the Tool' section")
 
 # Display currently used data source
-if uploaded_file is not None:
+if uploaded_file is not None & validate_uploaded_data(df_uploaded):
     data_source_text = f"<span style='color:#16AD43;'>{uploaded_file.name}</span>"
 else:
     data_source_text = "<span style='color:#6F9CEB;'>Provided Data</span>"
