@@ -131,8 +131,8 @@ with col1:
 # Remove Seasonality if not School
 if uniform_type != "School":
     del weights["Seasonality"]  # Remove Seasonality weight
-    total_weight = sum(weights.values())  # Sum of remaining weights
-    weights = {key: round((value / total_weight) * 100) for key, value in weights.items()}  # Renormalize to 100
+total_weight = sum(weights.values())  # Sum of remaining weights
+weights = {key: round((value / total_weight) * 100) for key, value in weights.items()}  # Renormalize to 100
 
 # Dynamically set the columns based on user selection
 market_size_col = f"Market Size - {uniform_type}"
