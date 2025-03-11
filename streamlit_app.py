@@ -104,7 +104,7 @@ expander.dataframe(df)
 expander.caption("Source: Uploaded file" if uploaded_file is not None else "Source: This data is from the original dataset this project was inspired by. It pulls from multiple publicly available sources, the details of which can be found in the 'About the Tool' section")
 
 # Display currently used data source
-if uploaded_file is not None & validate_uploaded_data(df_uploaded):
+if uploaded_file is not None and validate_uploaded_data(df_uploaded):
     data_source_text = f"<span style='color:#16AD43;'>{uploaded_file.name}</span>"
 else:
     data_source_text = "<span style='color:#6F9CEB;'>Provided Data</span>"
