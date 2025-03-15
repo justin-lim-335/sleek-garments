@@ -1,7 +1,8 @@
-# Sleek Garments Expansion Tools
-This set of expansion tools was created for the Winter 2025 MS&E 108 Senior Project Class at Stanford University by students Daniel Bishop, Manpreet Kaur, and Justin Lim for the use of Ghanian-based company, Sleek Garments.
+# Sleek Garments Expansion Dashboard
+This expansion score dashboard was created for the Winter 2025 MS&E 108 Senior Project Class at Stanford University by students Daniel Bishop, Manpreet Kaur, and Justin Lim for the use of Ghanian-based company, Sleek Garments.
 
-## Expansion Score Dashboard
-The expansion score dashboard takes in a dataset that covers a variety of factors
+The expansion score dashboard takes in a specific dataset that covers how well companies perform in the clothing market. This dataset namely has to cover factors such as market size, willingness to pay, tariff & shipping costs, sustainability & customization value, and seasonality of demand. Once a dataset like this is uploaded for a variety of countries that the client chooses, the tool will summarize all of the information into a singular metric called the expansion score. Having one metric to describe the overall expansion potential of a country makes for concise metrics to constantly compare against, especially when looking at different points in the market. 
 
-## Profit Calculator
+To emphasize this tool's flexibility for customization, the customer can not only look at different time periods of the market for the final expansion score, but they adjust how each factor is weighted in the expansion score. They can pick and choose what factors are most important to them and the tool will respond in kind. 
+
+The extent of this project extends beyond this singular dashboard and the host of files created for this project are actually contained in a public google drive folder with files that can easily be duplicated if anybody wanted to employ these tools themselves. Feel free to reference them at [this link]{https://drive.google.com/drive/folders/112ZNLNDn7zzSaMOKzF5XkdjDEIVFFe9m?usp=sharing} and our contact can be found should any questions need to be asked. 
